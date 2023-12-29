@@ -3,7 +3,7 @@ import { URL } from '@/const';
 import { useState } from "react";
 import Image from 'next/image';
 
-import register1 from "../public/myapi/register1.jpg";
+import register1 from "../public/myapi/register1.png";
 import register2 from "../public/myapi/register2.jpg";
 import login1 from "../public/myapi/login1.jpg";
 import login2 from "../public/myapi/login2.jpg";
