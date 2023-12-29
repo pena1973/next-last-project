@@ -4,6 +4,9 @@ import { useState } from "react";
 import Image from 'next/image';
 
 import register1 from "../public/myapi/register1.jpg";
+import register2 from "../public/myapi/register2.jpg";
+import login1 from "../public/myapi/login1.jpg";
+import login2 from "../public/myapi/login2.jpg";
 
 export default function Home() {
   const [query, setquery] = useState('register');
@@ -51,7 +54,7 @@ export default function Home() {
             <pre />
             <span className="bold">answer success: </span><pre />
 
-            <Image src={"/myapi/register2.jpg"} alt="register2" width={1000} height={80} />
+            <Image src={register2} alt="register2" width={1000} height={80} />
           </p>
         </div>}
         {query === 'login' && <div className="tabcontent">
@@ -64,10 +67,10 @@ export default function Home() {
             <span className="bold">Authorization: </span>  Bearer
             <pre />
             <span className="bold">body:  </span> <pre />
-            <Image src={"/myapi/login1.jpg"} alt="login1" width={250} height={100} />
+            <Image src={login1} alt="login1" width={250} height={100} />
             <pre />
             <span className="bold">answer success: </span><pre />
-            <Image src={"/myapi/login2.jpg"} alt="login2" width={1000} height={100} />
+            <Image src={login2} alt="login2" width={1000} height={100} />
           </p>
         </div>}
 
