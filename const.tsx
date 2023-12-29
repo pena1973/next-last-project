@@ -1,4 +1,2 @@
 
-// export const URL = process.env.NEXT_URL;
-
-export const URL = 'http://localhost:5000/';
+export const URL = process.env.NEXT_PUBLIC_URL;

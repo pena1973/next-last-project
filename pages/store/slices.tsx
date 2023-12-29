@@ -5,6 +5,7 @@ export type WorkState = {
     page: number, // номер скачанной итерации
     catalog: Item[], // все скачанные книги
     categories: {marked:boolean,name:string}[], // все категории книг с пометками
+    loading:boolean,
       
 }
 export type CartState = {
@@ -67,6 +68,7 @@ const workIntialState: WorkState = {
     // filter: [],
     // error: false,
     // message: "",
+    loading:false,
     
 }
 const cardIntialState: CartState = {    
@@ -96,6 +98,9 @@ const workSlice = createSlice({
         },
         setCategories: (state, action) => {
             state.categories = action.payload;
+        },     
+        showLoading: (state, action) => {
+            state.loading = action.payload;
         },     
     },
 
@@ -139,7 +144,7 @@ const cartSlice = createSlice({
 })
 export default function Foo(){return<></>}  // пустышка для билда
 
-export const { setPage, setCatalog, setCategories } = workSlice.actions;
+export const { setPage, setCatalog, setCategories,showLoading } = workSlice.actions;
 export const { setCart,  setQuantity } = cartSlice.actions;
 export const { setAbout, setLogin, setPass, setName, setToken} = authSlice.actions;
 export {  authSlice, cartSlice,  workSlice };

@@ -2,20 +2,20 @@ import { URL } from '@/const';
 import Layout from "@/components/Layout/layout";
 import BookCatalog from '../components/BookCatalog/bookCatalog';
 import CategoryCatalog from '../components/CategoryCatalog/categoryCatalog';
+import { Loader } from "@/components/Loader/loader"
 
-import { data } from "../mock"
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from "@/pages/_app";
 import { useRouter } from 'next/navigation';
-import { setPage, setCatalog } from '@/pages/store/slices';
-import { useState, useEffect,useRef, createContext, useContext} from "react";
+import { setPage, setCatalog, showLoading } from '@/pages/store/slices';
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 import { addNewCategories, addtoCatalogNewItems } from '@/utils'
 
 
 export default function Catalog() {
   const { push } = useRouter();
   const dispatch = useAppDispatch();
-  
+
   const page = useRef(0);
 
   const token = useSelector((state: RootState) => {
@@ -26,12 +26,16 @@ export default function Catalog() {
     return state.workSlice.catalog;
   })
 
+  const loading = useSelector((state: RootState) => {
+    return state.workSlice.loading;
+  })
+
   const [categories, setCategories] = useState([] as { marked: boolean, name: string }[]);
 
   //  фильтрует показ книг 
   //  если ничего  по фильтру не найдено  возврат всего каталога
   //  если найдено то все что нашлочсь по фильтру
-  const filterBooks = (categories: { marked: boolean, name: string }[],catalog:Item[]) => {
+  const filterBooks = (categories: { marked: boolean, name: string }[], catalog: Item[]) => {
     let markedCategory = categories.filter(elem => { return elem.marked });
     if (markedCategory.length === 0) {
       return catalog;
@@ -49,7 +53,7 @@ export default function Catalog() {
       return cat;
     }
   }
-  const [filteredCatalog, setFilteredCatalog] = useState(filterBooks(categories,catalog));
+  const [filteredCatalog, setFilteredCatalog] = useState(filterBooks(categories, catalog));
 
   // обрабатывает нажатие по категории по категории (отбор по категории)
   const selectCategory = (category: { marked: boolean, name: string }) => {
@@ -57,14 +61,14 @@ export default function Catalog() {
       if (elem.name === category.name) {
         elem.marked = !elem.marked;
       }
-      setFilteredCatalog(filterBooks(categories,catalog));
+      setFilteredCatalog(filterBooks(categories, catalog));
       setCategories([...categories])
     })
   }
 
   // Загрузка порции  книг
   const loadMore = async () => {
-
+    dispatch(showLoading(true));
     let _url = String(URL);
     _url = _url.concat((_url[_url.length - 1] === "/") ? "" : "/");
     let filteredCategories = categories.filter(elem => elem.marked)
@@ -94,10 +98,11 @@ export default function Catalog() {
 
         let commonCategories = addNewCategories(categories, receivedData.result)
         let commonCatalog = addtoCatalogNewItems(catalog, receivedData.result)
-        page.current = page.current + 1;        
+        page.current = page.current + 1;
         dispatch(setCatalog(commonCatalog));
         setCategories(commonCategories);
-        setFilteredCatalog(filterBooks(categories,commonCatalog))        
+        setFilteredCatalog(filterBooks(categories, commonCatalog))
+        dispatch(showLoading(false));
       }
       else {
         push('/404');
@@ -107,8 +112,8 @@ export default function Catalog() {
 
   // загруз на старте
   useEffect(() => {
-     dispatch(setPage(0));
-     dispatch(setCatalog([] as Item[]));
+    dispatch(setPage(0));
+    dispatch(setCatalog([] as Item[]));
     loadMore();
   }, []);
 
@@ -124,8 +129,9 @@ export default function Catalog() {
   };
   return (
     <Layout>
- 
-      {/* <div className="button-container-back"><button className="smallround-gray"> back</button></div> */}
+
+
+
       <div className="catalog-container">
 
         <div className="catalog-left">
@@ -140,7 +146,9 @@ export default function Catalog() {
         </div>
 
         <div className="catalog-right">
-          {itemsReactNodes}
+          {loading && <Loader />}
+          {!loading && itemsReactNodes}
+
           <div className="catalog-book-button-container">
             <button className="biground-gray" onClick={(e) => loadMore()}> More</button>
             <button className="biground-red" onClick={(e) => addBook()}> Add book</button>
