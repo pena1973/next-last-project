@@ -2,6 +2,9 @@ import Layout from "@/components/Layout/layout";
 import { URL } from '@/const';
 import { useState } from "react";
 import Image from 'next/image';
+
+import register1 from "../../public/myapi/register1.jpg";
+
 export default function Home() {
   const [query, setquery] = useState('register');
 
@@ -43,7 +46,7 @@ export default function Home() {
             <span className="bold">Authorization: </span>  Bearer
             <pre />
             <span className="bold">body:  </span> <pre />
-            <Image src={"/myapi/register1.jpg"} alt="register1" width={300} height={120} />
+            <Image src={register1} alt="register1" width={300} height={120} />
 
             <pre />
             <span className="bold">answer success: </span><pre />
