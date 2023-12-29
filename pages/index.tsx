@@ -56,7 +56,7 @@ export default function Home() {
             <pre />
             I have two higher education degrees and an MBA
             <pre />
-            I will send a resume in classic form upon request.
+            I will send my CV in classic form upon request.
             <pre />
             My contact:
           </p>
@@ -143,7 +143,7 @@ export default function Home() {
             <pre />
             Tengo dos títulos de educación superior y un MBA.
             <pre />
-            Enviaré un currículum en formato clásico si lo solicita.
+            Enviaré mi CV en formato clásico si lo solicita.
             <pre />
             Mi contacto:
           </p>

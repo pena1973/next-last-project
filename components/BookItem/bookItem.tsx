@@ -8,7 +8,7 @@ import book from "../../public/book.png";
 import { useState } from "react";
 import { useSelector } from 'react-redux';
 import { useRouter,redirect,RedirectType } from 'next/navigation';
-
+import { setCart,  setQuantity } from '@/pages/store/slices';
 import { setCatalog, setCategories } from '@/pages/store/slices';
 import { RootState, useAppDispatch } from "@/pages/_app";
 
@@ -37,41 +37,65 @@ export default function BookItem({
     const catalog = useSelector((state: RootState) => {
         return state.workSlice.catalog;
     })
+    
+    const cart = useSelector((state: RootState) => {
+        return state.cartSlice.cart;
+    })
+    
+    const quantity = useSelector((state: RootState) => {
+        return state.cartSlice.quantity;
+    })
 
+    let newItem = false;
     let item = {} as Item;
-    if (id === 0) item.id = 0;
+    if (id === 0) {
+        id=getUnickID(); 
+        item.id = id;  
+        newItem=true;
+    }
     else item = catalog.find(elem => { return elem.id === id }) as Item;
 
-    if (!item) {push('/404'); return ( <></>) ;}
+    // if (!item) {push('/404'); return ( <></>) ;}
 
     // состояние отображения
     const [itemAuthors, setItemAuthors] = useState((!item?.authors) ? "" : getStrinAuthors(item.authors).join(', '));
     const [itemCategories, setItemCategories] = useState((!item?.categories) ? "" : getStringCategories(item.categories).join(', '));
 
-    const [itemName, setItemName] = useState(item.name);
-    const [itemDescription, setItemDescription] = useState(item.description);
-    const [itemRaiting, setItemRaiting] = useState(item.raiting);
-    const [itemCurency, setItemCurency] = useState(item.curency?.name);
-    const [itemPrice, setItemPrice] = useState(item.price);
-    const [itemEsteemes, setItemEsteemes] = useState(item.esteemes);
-    const [itemId, setItemId] = useState(item.id);
-    const [itemLanguage, setItemLanguage] = useState(item.language);
-    const [itemPublished, setItemPublished] = useState(item.published);
+    const [itemName, setItemName] = useState(item?.name);
+    const [itemDescription, setItemDescription] = useState(item?.description);
+    const [itemRaiting, setItemRaiting] = useState(item?.raiting);
+    const [itemCurency, setItemCurency] = useState(item?.curency?.name);
+    const [itemPrice, setItemPrice] = useState(item?.price);
+    const [itemEsteemes, setItemEsteemes] = useState(item?.esteemes);
+    const [itemId, setItemId] = useState(item?.id);
+    const [itemLanguage, setItemLanguage] = useState(item?.language);
+    const [itemPublished, setItemPublished] = useState(item?.published);
 
     // состояние редактирования
-    const [edit, setEdit] = useState((item.id === 0) ? true : false); //  если новый сразу на редактирование
-    const [nameValue, setNameValue] = useState(item.name);
+    const [edit, setEdit] = useState(newItem); //  если новый сразу на редактирование
+    const [nameValue, setNameValue] = useState(item?.name);
     const [autorsValue, setAutorsValue] = useState(itemAuthors);
     const [categoriesValue, setCategoriesValue] = useState(itemCategories);
-    const [descriptionValue, setDescriptionValue] = useState(item.description);
-    const [raitingValue, setRaitingValue] = useState(item.raiting);
-    const [curencyValue, setCurencyValue] = useState(item.curency?.name);
-    const [priceValue, setPriceValue] = useState(String((item.price===undefined)?"":item.price));
-    const [langvuageValue, setLanguageValue] = useState(item.language);
-    const [publishedValue, setPublishedValue] = useState(item.published);
+    const [descriptionValue, setDescriptionValue] = useState(item?.description);
+    const [raitingValue, setRaitingValue] = useState(item?.raiting);
+    const [curencyValue, setCurencyValue] = useState(item?.curency?.name);
+    const [priceValue, setPriceValue] = useState(String((item?.price===undefined)?"":item?.price));
+    const [langvuageValue, setLanguageValue] = useState(item?.language);
+    const [publishedValue, setPublishedValue] = useState(item?.published);
 
     // добавление в корзину
-    const buy = (e: React.MouseEvent<HTMLElement>) => { };
+    const buy = (e: React.MouseEvent<HTMLElement>) => {
+        let newcart = [...cart];
+        let index = newcart.findIndex(elem => { return elem.item.id === item.id });
+      
+        if (index === (-1))
+            newcart.push({ item: item, quantity: 1 })
+        else
+            newcart.splice(index, 1, { item: newcart[index].item, quantity: newcart[index].quantity + 1 })
+
+        dispatch(setCart(newcart))
+        dispatch(setQuantity(quantity + 1))
+    };
     // редактирование книги
     const saveItem = async () => {
 
@@ -90,8 +114,7 @@ export default function BookItem({
         }
 
         let _url = String(URL);
-        _url = _url.concat((_url[_url.length - 1] === "/") ? "" : "/");
-        if (item.id === 0) item.id = getUnickID();
+        _url = _url.concat((_url[_url.length - 1] === "/") ? "" : "/");        
         const res = await fetch(`${_url}api/v1/books/book/${item.id}`,
             {
                 method: 'put',
@@ -132,6 +155,8 @@ export default function BookItem({
                 setItemId(resultEdit.id);
                 setItemPublished(resultEdit.published);
                 setItemLanguage(resultEdit.language);
+                
+                push(`/book/${item.id}`);
             }
             else {
                 push('/404');
@@ -176,15 +201,18 @@ export default function BookItem({
                 dispatch(setCatalog(commonCatalog));
                 dispatch(setCategories(commonCategories));
                 setEdit(false);
-                push('/catalog');
+             
             }
         }
+        // push(`/book/${item.id}`);
+        push('/catalog'); 
+         return (<></>)
     };
 
     return (
         <>
             <div className={styles.book_container}>
-                {(itemId !== 0) && <div className={styles.book_container_show}>
+                {(!newItem) && <div className={styles.book_container_show}>
                     <div className={styles.book_container_left}>
                         <Image src={book} alt="book" className={styles.book_thumbnail} />
                     </div>
@@ -210,8 +238,8 @@ export default function BookItem({
                     <div className={styles.book_container_edit}>
 
                         <label className={styles.edit_label}>name: </label>
-                        {(itemId !== 0) && <div className={styles.name}>{nameValue}</div>}
-                        {(itemId === 0) && <textarea className={styles.edit_input} placeholder="name" maxLength={100}
+                        {(!newItem) && <div className={styles.name}>{nameValue}</div>}
+                        {(newItem) && <textarea className={styles.edit_input} placeholder="name" maxLength={100}
                             itemType="text" value={nameValue}
                             onChange={e => { setNameValue(e.target.value) }} required></textarea>}
 

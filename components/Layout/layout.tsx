@@ -11,7 +11,7 @@ import cloud4 from "../../public/clouds/cloud-04.png";
 import cart from "../../public/cart-rem.png";
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from "@/pages/_app";
-import { setToken  } from '@/pages/store/slices';
+import { setToken } from '@/pages/store/slices';
 import { useSelector } from 'react-redux';
 import { RootState } from "@/pages/_app";
 export default function Layout({ children }: PropsWithChildren) {
@@ -20,11 +20,11 @@ export default function Layout({ children }: PropsWithChildren) {
 
     const token = useSelector((state: RootState) => {
         return state.authSlice.token;
-      })
-      
+    })
+
     const quantity = useSelector((state: RootState) => {
         return state.cartSlice.quantity;
-    }) 
+    })
 
     const exitClick = async (e: React.MouseEvent<HTMLElement>) => {
         dispatch(setToken(""));
@@ -40,10 +40,10 @@ export default function Layout({ children }: PropsWithChildren) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={clouds.cloud}>
-                <Image className={clouds.cloud1} src={cloud1} alt="cloud1" priority={false}/>
-                <Image className={clouds.cloud2} src={cloud2} alt="cloud2" priority={false}/>
-                <Image className={clouds.cloud3} src={cloud3} alt="cloud3" priority={false}/>
-                <Image className={clouds.cloud4} src={cloud4} alt="cloud4" priority={false}/>
+                <Image className={clouds.cloud1} src={cloud1} alt="cloud1" priority={false} />
+                <Image className={clouds.cloud2} src={cloud2} alt="cloud2" priority={false} />
+                <Image className={clouds.cloud3} src={cloud3} alt="cloud3" priority={false} />
+                <Image className={clouds.cloud4} src={cloud4} alt="cloud4" priority={false} />
                 <div className={clouds.cover}></div>
             </div>
             <div className={styles.container}>
@@ -55,25 +55,31 @@ export default function Layout({ children }: PropsWithChildren) {
                     </div>
 
                     <nav className={styles.header_nav}>
-                        
+
                         <ul className={styles.header_ul}>
                             <li className={styles.header_nav_item}>
                                 <Link href="/catalog">
                                     Catalog
                                 </Link>
+                            </li>   
+                            <li className={styles.header_nav_item}>
+                                <Link href="/myapi">
+                                    API
+                                </Link>
                             </li>
                         </ul>
                     </nav>
+
                     <div className={styles.profile_button}>
 
-                        <Link className={styles.cart}  href="/cart">
+                        <Link className={styles.cart} href="/cart">
                             <Image src={cart} alt="cart" className={styles.cart} />
                             <div className={styles.total}>{quantity}</div>
                         </Link>
-                        {(token==="")&&<Link href="/login"><button>Enter</button></Link>}
-                        {(token==="")&&<Link href="/register"><button>Registration</button></Link>}
+                        {(token === "") && <Link href="/login"><button>Enter</button></Link>}
+                        {(token === "") && <Link href="/register"><button>Registration</button></Link>}
 
-                        {(token!=="")&&<button onClick={(e) => exitClick(e)}>Exit</button> }
+                        {(token !== "") && <button onClick={(e) => exitClick(e)}>Exit</button>}
                     </div>
 
                 </div>

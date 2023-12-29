@@ -28,9 +28,6 @@ export default function BookCatalog({
         return state.cartSlice.quantity;
     })
    
-//   const catalog = useSelector((state: RootState) => {
-//     return state.workSlice.catalog;
-//   })
 
     let autors = (!item?.authors) ? "" : getNameArray(item.authors).join(', ');
 

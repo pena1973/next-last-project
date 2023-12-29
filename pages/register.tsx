@@ -74,23 +74,23 @@ export default function Register() {
             <form className="form_login">           
                 {(message !== "Успешно!") &&<div className="message">{message}</div>}
                 <label className="form_label">login(email): &nbsp; &nbsp;
-                    <input id="login" className="form_input" type="email" value={emailValue}
+                    <input id="login" className="form_input" placeholder="email" type="email" value={emailValue}
                         onChange={e => { setEmailValue(e.target.value) }} minLength={4} required />
                 </label>
 
                 <label className="form_label"> &nbsp;&nbsp;&nbsp; password: &nbsp; &nbsp;
-                    <input id="password" className="form_input" type="password" value={passwordValue}
+                    <input id="password" className="form_input" placeholder="min 8" type="password" value={passwordValue}
                         onChange={e => { setPasswordValue(e.target.value) }} minLength={8} required />
                 </label>
 
-                <label className="form_label"> &nbsp;&nbsp;&nbsp; name: &nbsp; &nbsp;
-                    <input id="name" className="form_input" type="text" value={nameValue}
+                <label className="form_label"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &nbsp; &nbsp;
+                    <input id="name" className="form_input" placeholder="name" type="text" value={nameValue}
                         onChange={e => { setNameValue(e.target.value) }} autoComplete="off" required />
                 </label>
 
 
                 <label className="form_label form_label_description">&nbsp; &nbsp;&nbsp;About me: &nbsp; &nbsp;
-                    <textarea id="description" className="form_textarea" placeholder="a little be crasy" value={descriptionValue}
+                    <textarea id="description" className="form_textarea" placeholder="about" value={descriptionValue}
                         onChange={e => { setDescriptionValue(e.target.value) }}></textarea>
                 </label>
 

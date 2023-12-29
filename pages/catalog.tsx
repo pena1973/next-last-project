@@ -31,7 +31,7 @@ export default function Catalog() {
   //  фильтрует показ книг 
   //  если ничего  по фильтру не найдено  возврат всего каталога
   //  если найдено то все что нашлочсь по фильтру
-  const filterBooks = (categories: { marked: boolean, name: string }[]) => {
+  const filterBooks = (categories: { marked: boolean, name: string }[],catalog:Item[]) => {
     let markedCategory = categories.filter(elem => { return elem.marked });
     if (markedCategory.length === 0) {
       return catalog;
@@ -49,7 +49,7 @@ export default function Catalog() {
       return cat;
     }
   }
-  const [filteredCatalog, setFilteredCatalog] = useState(filterBooks(categories));
+  const [filteredCatalog, setFilteredCatalog] = useState(filterBooks(categories,catalog));
 
   // обрабатывает нажатие по категории по категории (отбор по категории)
   const selectCategory = (category: { marked: boolean, name: string }) => {
@@ -57,7 +57,7 @@ export default function Catalog() {
       if (elem.name === category.name) {
         elem.marked = !elem.marked;
       }
-      setFilteredCatalog(filterBooks(categories));
+      setFilteredCatalog(filterBooks(categories,catalog));
       setCategories([...categories])
     })
   }
@@ -97,7 +97,7 @@ export default function Catalog() {
         page.current = page.current + 1;        
         dispatch(setCatalog(commonCatalog));
         setCategories(commonCategories);
-        setFilteredCatalog(filterBooks(categories))
+        setFilteredCatalog(filterBooks(categories,commonCatalog))        
       }
       else {
         push('/404');
