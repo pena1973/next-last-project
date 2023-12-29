@@ -49,7 +49,7 @@ export default function Home() {
             <span className="bold">Authorization: </span>  Bearer
             <pre />
             <span className="bold">body:  </span> <pre />
-            <Image src={register1} alt="register1" width={300} height={120} />
+            <Image src={"@/public/book.png"} alt="register1" width={300} height={120} />
 
             <pre />
             <span className="bold">answer success: </span><pre />
