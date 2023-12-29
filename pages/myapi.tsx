@@ -3,7 +3,7 @@ import { URL } from '@/const';
 import { useState } from "react";
 import Image from 'next/image';
 
-import register1 from "../../public/myapi/register1.jpg";
+import register1 from "../public/myapi/register1.jpg";
 
 export default function Home() {
   const [query, setquery] = useState('register');
